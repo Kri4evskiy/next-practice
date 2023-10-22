@@ -5,7 +5,7 @@ import { useTheme } from 'styled-components'
 
 import { MoonIcon, SunIcon } from '../Icons'
 import { useThemeToggle } from '../Providers/StylesProvider'
-import { Input, Label, Switch } from './styles'
+import { StyledInput, StyledLabel, StyledSwitch } from './styles'
 
 export const ToggleSwitch = () => {
 	const [checked, setChecked] = useState(false)
@@ -18,11 +18,11 @@ export const ToggleSwitch = () => {
 	}
 
 	return (
-		<Label>
+		<StyledLabel>
 			<MoonIcon color={theme.themeIcon} />
-			<Input checked={checked} type="checkbox" onChange={handleChange} />
-			<Switch />
+			<StyledInput checked={checked} type="checkbox" onChange={handleChange} />
+			<StyledSwitch />
 			<SunIcon color={theme.themeIcon} />
-		</Label>
+		</StyledLabel>
 	)
 }

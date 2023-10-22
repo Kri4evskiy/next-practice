@@ -1,7 +1,7 @@
 'use client'
 
 import { PageContainer } from '@/components/PageContainer'
-import { Wrapper } from './styles'
+import { StyledWrapper } from './styles'
 import { Typography } from '@/components/Typography'
 import { useTheme } from 'styled-components'
 import { Button } from '@/components/Button'
@@ -10,10 +10,10 @@ export default function HomePage() {
 	const theme = useTheme()
 	return (
 		<PageContainer>
-			<Wrapper>
+			<StyledWrapper>
 				<Typography tag="h1" text="Data USA" color={theme.title} />
-				<Button text="Tap on it!" link="/summary" />
-			</Wrapper>
+				<Button text="Tap on it!" link="/summary" width={136} />
+			</StyledWrapper>
 		</PageContainer>
 	)
 }

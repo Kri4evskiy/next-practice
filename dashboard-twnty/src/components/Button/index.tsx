@@ -5,12 +5,13 @@ type Props = {
 	text: string
 	onClick?: () => void
 	link?: string
+	width?: number
 }
 
-export const Button = ({ text, onClick, link }: Props) => {
+export const Button = ({ text, onClick, link, width }: Props) => {
 	if (link) {
 		return (
-			<StyledButton type="button">
+			<StyledButton type="button" width={width}>
 				<Link href={link}>{text}</Link>
 			</StyledButton>
 		)

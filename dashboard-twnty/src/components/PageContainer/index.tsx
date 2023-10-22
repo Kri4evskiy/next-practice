@@ -1,6 +1,6 @@
+import GlobalStyles from '@/styles/GlobalStyles'
 import React from 'react'
 import { Header } from '../Header'
-import GlobalStyles from '@/styles/GlobalStyles'
 
 export const PageContainer = ({ children }: { children: React.ReactNode }) => {
 	return (

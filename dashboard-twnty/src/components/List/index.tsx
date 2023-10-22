@@ -1,16 +1,20 @@
+import { FormattedDataType } from '@/types/USAPopulationType'
+import Link from 'next/link'
 import { ListItem } from '../ListItem'
-import { ListWrapper } from './styles'
+import { StyledListWrapper } from './styles'
 
 type Props = {
-	data: { [key: string]: string | number }[]
+	data: FormattedDataType[]
 }
 
 export const List = ({ data }: Props) => {
 	return (
-		<ListWrapper>
+		<StyledListWrapper>
 			{data.map(el => (
-				<ListItem key={el.value} data={el} />
+				<Link href={`/summary/${el.Year}`} key={el.Year}>
+					<ListItem data={el} />
+				</Link>
 			))}
-		</ListWrapper>
+		</StyledListWrapper>
 	)
 }

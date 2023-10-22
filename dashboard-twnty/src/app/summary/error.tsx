@@ -1,6 +1,8 @@
 'use client'
 
 import { useEffect } from 'react'
+import { StyledWrapper } from './styles'
+import Link from 'next/link'
 
 export default function Error({
 	error,
@@ -14,9 +16,9 @@ export default function Error({
 	}, [error])
 
 	return (
-		<div>
+		<StyledWrapper>
 			<h2>Something went wrong!</h2>
-			<button onClick={() => reset()}>Try again</button>
-		</div>
+			<Link href={'/'}>Home page</Link>
+		</StyledWrapper>
 	)
 }

@@ -6,53 +6,59 @@ import { List } from '@/components/List'
 import { PageContainer } from '@/components/PageContainer'
 import { Table } from '@/components/Table'
 import { PopulationFormat } from '@/enums'
-import { FormattedDataType, USAPopulationResponseType } from '@/types/USAPopulationType'
-import { useEffect, useState } from 'react'
-import { ButtonGroupWrapper, Wrapper } from './styles'
+import { fetchPopulation } from '@/lib/fetchPopulation'
+import { FormattedDataType } from '@/types/USAPopulationType'
+import { useCallback, useEffect, useReducer, useState } from 'react'
+import { StyledButtonGroupWrapper, StyledDataButtonGroupWrapper, StyledWrapper } from './styles'
+import { sortByPopulation, sortByYear, sortReducer, sortingFn } from './helpers'
 
 export default function SummaryPage() {
 	const [population, setPopulation] = useState<FormattedDataType[]>([])
 	const [format, setFormat] = useState<PopulationFormat>(PopulationFormat.LIST)
+	const [sortState, dispatch] = useReducer(sortReducer, {
+		yearOrder: 'init',
+		populationOrder: 'init'
+	})
 
 	useEffect(() => {
-		const fetchData = async (): Promise<void> => {
-			const response = await fetch(
-				'https://datausa.io/api/data?drilldowns=Nation&measures=Population'
-			)
-
-			if (!response.ok) {
-				throw new Error(`HTTP error! status: ${response.status}`)
-			}
-
-			const { data } = (await response.json()) as USAPopulationResponseType
-			console.log(data)
-
-			const formattedData = data.map(el => ({
-				Nation: el.Nation,
-				Population: el.Population,
-				Year: el.Year
-			}))
-
-			setPopulation(formattedData as FormattedDataType[])
-		}
-
-		fetchData()
+		fetchPopulation(process.env.API_URL || '').then(data => setPopulation(data))
 	}, [])
+
+	const handleSetFormat = useCallback((format: PopulationFormat) => setFormat(format), [])
+
+	const handleSortByYear = useCallback(() => {
+		dispatch({ type: 'year' })
+		setPopulation(sortingFn(population, sortState.yearOrder, sortByYear))
+	}, [population, sortState.yearOrder])
+
+	const handleSortByPopulation = useCallback(() => {
+		dispatch({ type: 'population' })
+		setPopulation(sortingFn(population, sortState.populationOrder, sortByPopulation))
+	}, [population, sortState.populationOrder])
+
 	return (
 		<PageContainer>
-			<Wrapper>
-				<ButtonGroupWrapper>
-					<Button text="BLOG" onClick={() => setFormat(PopulationFormat.BLOG)} />
-					<Button text="TABLE" onClick={() => setFormat(PopulationFormat.TABLE)} />
-					<Button text="LIST" onClick={() => setFormat(PopulationFormat.LIST)} />
-				</ButtonGroupWrapper>
+			<StyledWrapper>
+				<StyledButtonGroupWrapper>
+					<Button text="BLOG" onClick={() => handleSetFormat(PopulationFormat.BLOG)} />
+					<Button text="TABLE" onClick={() => handleSetFormat(PopulationFormat.TABLE)} />
+					<Button text="LIST" onClick={() => handleSetFormat(PopulationFormat.LIST)} />
+				</StyledButtonGroupWrapper>
 
 				<div>
+					<StyledDataButtonGroupWrapper>
+						<Button text={`Year: ${sortState.yearOrder}`} onClick={handleSortByYear} />
+						<Button
+							text={`Population: ${sortState.populationOrder}`}
+							onClick={handleSortByPopulation}
+						/>
+					</StyledDataButtonGroupWrapper>
+
 					{format === PopulationFormat.BLOG && <Blog data={population} />}
 					{format === PopulationFormat.TABLE && <Table data={population} />}
 					{format === PopulationFormat.LIST && <List data={population} />}
 				</div>
-			</Wrapper>
+			</StyledWrapper>
 		</PageContainer>
 	)
 }

@@ -1,13 +1,13 @@
 import styled from 'styled-components'
 
-export const StyledButton = styled.button`
+export const StyledButton = styled.button<{ width?: number }>`
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	text-align: center;
 	padding: 8px 24px 8px 24px;
 	border-radius: 12px;
-	width: 136px;
+	width: ${({ width }) => (width ? `${width}px;` : '120px;')};
 
 	font-style: normal;
 	font-size: 18px;

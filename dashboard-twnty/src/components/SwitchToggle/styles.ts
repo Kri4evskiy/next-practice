@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const Label = styled.label`
+export const StyledLabel = styled.label`
 	display: flex;
 	align-items: center;
 	gap: 10px;
@@ -8,7 +8,7 @@ export const Label = styled.label`
 	cursor: pointer;
 `
 
-export const Switch = styled.div`
+export const StyledSwitch = styled.div`
 	position: relative;
 	width: 68px;
 	height: 32px;
@@ -31,11 +31,11 @@ export const Switch = styled.div`
 	}
 `
 
-export const Input = styled.input`
+export const StyledInput = styled.input`
 	opacity: 0;
 	position: absolute;
 
-	&:checked + ${Switch} {
+	&:checked + ${StyledSwitch} {
 		background: ${({ theme }) => theme.themeToggle};
 
 		&:before {

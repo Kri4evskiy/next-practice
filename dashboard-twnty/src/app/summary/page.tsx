@@ -4,25 +4,46 @@ import { Blog } from '@/components/Blog'
 import { Button } from '@/components/Button'
 import { List } from '@/components/List'
 import { PageContainer } from '@/components/PageContainer'
+import { SearchInput } from '@/components/SearchInput'
 import { Table } from '@/components/Table'
+import { Typography } from '@/components/Typography'
 import { PopulationFormat } from '@/enums'
-import { fetchPopulation } from '@/lib/fetchPopulation'
 import { FormattedDataType } from '@/types/USAPopulationType'
-import { useCallback, useEffect, useReducer, useState } from 'react'
-import { StyledButtonGroupWrapper, StyledDataButtonGroupWrapper, StyledWrapper } from './styles'
+import Fuse from 'fuse.js'
+import React, { ChangeEvent, useCallback, useEffect, useMemo, useReducer, useState } from 'react'
+import { useFetchPopulation } from '../../hooks'
 import { sortByPopulation, sortByYear, sortReducer, sortingFn } from './helpers'
+import { StyledButtonGroupWrapper, StyledDataButtonGroupWrapper, StyledWrapper } from './styles'
 
 export default function SummaryPage() {
-	const [population, setPopulation] = useState<FormattedDataType[]>([])
+	const [querySearch, setQuerySearch] = useState('')
 	const [format, setFormat] = useState<PopulationFormat>(PopulationFormat.LIST)
 	const [sortState, dispatch] = useReducer(sortReducer, {
 		yearOrder: 'init',
 		populationOrder: 'init'
 	})
 
+	const { data: populationData, loading } = useFetchPopulation(
+		process.env.NEXT_PUBLIC_API_URL || ''
+	)
+	const [population, setPopulation] = useState(populationData)
 	useEffect(() => {
-		fetchPopulation(process.env.API_URL || '').then(data => setPopulation(data))
-	}, [])
+		setPopulation(populationData)
+	}, [populationData])
+
+	const fuse = new Fuse(population, {
+		keys: ['Year', 'Population']
+	})
+
+	const fuseResult = useMemo(() => {
+		return querySearch
+			? fuse.search(querySearch).map(fuseElement => fuseElement.item)
+			: populationData
+	}, [querySearch, populationData])
+
+	const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+		setQuerySearch(e.target.value)
+	}
 
 	const handleSetFormat = useCallback((format: PopulationFormat) => setFormat(format), [])
 
@@ -46,6 +67,13 @@ export default function SummaryPage() {
 				</StyledButtonGroupWrapper>
 
 				<div>
+					<SearchInput
+						isNumber
+						text="Numeric input that filter data by Year or Population (not hard options)"
+						inputValue={querySearch}
+						onChange={onChangeHandler}
+					/>
+
 					<StyledDataButtonGroupWrapper>
 						<Button text={`Year: ${sortState.yearOrder}`} onClick={handleSortByYear} />
 						<Button
@@ -54,11 +82,32 @@ export default function SummaryPage() {
 						/>
 					</StyledDataButtonGroupWrapper>
 
-					{format === PopulationFormat.BLOG && <Blog data={population} />}
-					{format === PopulationFormat.TABLE && <Table data={population} />}
-					{format === PopulationFormat.LIST && <List data={population} />}
+					<RenderPopulation loading={loading} format={format} population={fuseResult} />
 				</div>
 			</StyledWrapper>
 		</PageContainer>
 	)
+}
+
+const RenderPopulation = ({
+	loading,
+	format,
+	population
+}: {
+	loading: boolean
+	format: PopulationFormat
+	population: FormattedDataType[]
+}) => {
+	if (loading) return <Typography tag="p" strong text="Loading..." />
+
+	switch (format) {
+		case PopulationFormat.BLOG:
+			return <Blog data={population} />
+		case PopulationFormat.TABLE:
+			return <Table data={population} />
+		case PopulationFormat.LIST:
+			return <List data={population} />
+		default:
+			return null
+	}
 }

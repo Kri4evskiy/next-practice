@@ -8,6 +8,7 @@ export const StyledHeaderWrapper = styled.header`
 	padding: 0 12px;
 	height: 58px;
 	width: 100vw;
+
 	border-bottom: 1px solid ${({ theme }) => theme.underline};
 	transition: background-color 0.3s linear;
 	background-color: ${({ theme }) => theme.bg};
@@ -17,7 +18,7 @@ export const StyledHeaderWrapper = styled.header`
 	}
 `
 
-export const StyledToggleWrapper = styled.header`
+export const StyledToggleWrapper = styled.div`
 	position: absolute;
 	right: 12px;
 `

@@ -2,6 +2,7 @@ import styled from 'styled-components'
 
 export const StyledListItemWrapper = styled.li`
 	display: flex;
+	justify-content: center;
 	align-items: center;
 	gap: 10px;
 	padding: 8px;

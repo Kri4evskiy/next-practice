@@ -2,8 +2,9 @@ import { useTheme } from 'styled-components'
 import { Logo } from '../Icons'
 import { ToggleSwitch } from '../SwitchToggle'
 import { StyledHeaderWrapper, StyledToggleWrapper } from './styles'
+import React from 'react'
 
-export const Header = () => {
+export const Header = React.memo(() => {
 	const theme = useTheme()
 	return (
 		<StyledHeaderWrapper>
@@ -13,4 +14,4 @@ export const Header = () => {
 			</StyledToggleWrapper>
 		</StyledHeaderWrapper>
 	)
-}
+})

@@ -1,0 +1,1 @@
+export { useFetchPopulation } from './useFetchPopulation'

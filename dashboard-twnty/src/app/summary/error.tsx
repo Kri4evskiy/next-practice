@@ -3,6 +3,7 @@
 import { useEffect } from 'react'
 import { StyledWrapper } from './styles'
 import Link from 'next/link'
+import { Routes } from '@/config'
 
 export default function Error({
 	error,
@@ -18,7 +19,7 @@ export default function Error({
 	return (
 		<StyledWrapper>
 			<h2>Something went wrong!</h2>
-			<Link href={'/'}>Home page</Link>
+			<Link href={Routes.HOME}>Home page</Link>
 		</StyledWrapper>
 	)
 }

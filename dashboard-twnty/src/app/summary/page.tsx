@@ -36,9 +36,11 @@ export default function SummaryPage() {
 	})
 
 	const fuseResult = useMemo(() => {
-		return querySearch
+		const result = querySearch
 			? fuse.search(querySearch).map(fuseElement => fuseElement.item)
 			: populationData
+
+		setPopulation(result)
 	}, [querySearch, populationData])
 
 	const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -82,7 +84,7 @@ export default function SummaryPage() {
 						/>
 					</StyledDataButtonGroupWrapper>
 
-					<RenderPopulation loading={loading} format={format} population={fuseResult} />
+					<RenderPopulation loading={loading} format={format} population={population} />
 				</div>
 			</StyledWrapper>
 		</PageContainer>

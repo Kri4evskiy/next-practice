@@ -1,7 +1,7 @@
 import React from 'react'
 
 type Props = {
-	tag: string
+	tag?: string
 	text: string
 	color?: string
 	strong?: boolean

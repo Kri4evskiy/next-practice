@@ -1,0 +1,81 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Boards {
+  id        String   @id @default(uuid())
+  title     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  columns Columns[]
+}
+
+model Columns {
+  id        String   @id @default(uuid())
+  title     String
+  boardId   String
+  board     Boards   @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  order     Int
+  width     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  cards Cards[]
+}
+
+model Cards {
+  id          String   @id @default(uuid())
+  title       String
+  columnId    String
+  column      Columns  @relation(fields: [columnId], references: [id], onDelete: Cascade)
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  order       Int
+}
+
+model Users {
+  id              String   @id @default(uuid())
+  username        String   @unique
+  email           String   @unique
+  isEmailVerified Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  credentials       Credentials[]
+  verifyEmailTokens VerifyEmailTokens[]
+}
+
+model Credentials {
+  id          String       @id @default(uuid())
+  userId      String
+  user        Users        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider    AuthProvider
+  accessToken String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@unique([userId, provider])
+}
+
+model VerifyEmailTokens {
+  id        String   @id @default(uuid())
+  userId    String
+  user      Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expires   DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum AuthProvider {
+  EMAIL
+}

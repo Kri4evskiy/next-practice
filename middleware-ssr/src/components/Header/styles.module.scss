@@ -1,0 +1,28 @@
+@import '@/styles/variables.module.scss';
+
+.header {
+	display: flex;
+	justify-content: center;
+
+	width: 100%;
+	height: $header-height;
+	background-color: $primary-color;
+}
+
+.header__container {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+	padding: 0px 16px;
+
+	@media (min-width: $min-desktop-width) {
+		max-width: $max-desktop-width;
+	}
+}
+
+.logo__wrapper {
+	display: flex;
+	align-items: center;
+	gap: 142px;
+}

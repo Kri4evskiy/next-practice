@@ -1,0 +1,41 @@
+@import '@/styles/variables.module.scss';
+
+*,
+*:before,
+*:after {
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+	border: 0;
+
+	font-family: var(--font-roboto);
+}
+
+html,
+body {
+	max-width: 100vw;
+	height: 100%;
+	overflow-x: hidden;
+}
+
+main {
+	display: flex;
+	justify-content: center;
+
+	width: 100%;
+	min-height: $main-min-height;
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.main__container {
+	width: 100%;
+	padding: 8px 16px;
+
+	@media (min-width: $min-desktop-width) {
+		max-width: $max-desktop-width;
+	}
+}

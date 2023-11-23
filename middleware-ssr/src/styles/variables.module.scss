@@ -1,0 +1,17 @@
+$min-desktop-width: 1024px;
+$max-desktop-width: 1300px;
+$max-mobile-width: 600px;
+
+$header-height: 58px;
+$footer-height: 48px;
+$main-min-height: calc(100vh - $header-height - $footer-height);
+
+$primary-color: #56a5ad;
+$gray: #bcc4cf;
+$error: #d21a27;
+$white: #fff;
+
+:export {
+	white: $white;
+	primaryColor: $primary-color;
+}
